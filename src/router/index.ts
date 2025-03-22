@@ -1,22 +1,54 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { createRouter, createWebHashHistory } from 'vue-router'
+import VoteType from '../views/VoteType.vue'
+import HomeView from '@/views/HomeView.vue'
+// import PleaseLogin from '@/views/PleaseLogin.vue'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(),
   routes: [
     {
       path: '/',
-      name: 'home',
+      name: 'home-view',
       component: HomeView,
+      children: [
+        // {
+        //   path: '', 
+        //   redirect: 'vote-type',
+        // },
+        {
+          path: 'vote-type',
+          name:'vote-type',
+          alias: '',
+          component: VoteType,
+        }, 
+        {
+          path: 'me', 
+          name: 'me', 
+          component: () => import('../views/MePage.vue'),
+        }
+      ]
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
+      path: '/create', 
+      name: 'create', 
+      component: () => import('../views/CreateVote.vue')
     },
+    {
+      path: '/vote/:id',
+      name: 'vote',
+      component: () => import('../views/OneVote.vue'),
+    },
+    {
+      path: '/my-votes', 
+      name: 'my-votes', 
+      component: () => import('../views/MyVotes.vue')
+    }, 
+    {
+      path: '/login', 
+      name: 'login', 
+      component: () => import('../views/PleaseLogin.vue')
+    }, 
+    
   ],
 })
 

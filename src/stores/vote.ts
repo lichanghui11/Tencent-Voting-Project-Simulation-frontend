@@ -2,8 +2,14 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
+type User = {
+  userId: number, 
+  name: string, 
+  email: string, 
+  avatar: string,
+}
 export const useVoteStore = defineStore('vote', () => {
-  const user = ref(null)
+  const user = ref<User | null>(null)
 
   async function getUserInfo() {
     try {

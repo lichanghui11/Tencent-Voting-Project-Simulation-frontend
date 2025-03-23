@@ -18,7 +18,6 @@ export function useLogin() {
   const route = useRoute()
   const voteStore = useVoteStore()  
 
-  debugger
   if (voteStore.user === null) {
     //用户未登录
     router.replace('/login?next=' + route.fullPath)

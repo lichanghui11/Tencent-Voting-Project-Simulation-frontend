@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { defineProps, defineEmits } from 'vue'
 
-const props = defineProps({
+defineProps({
   //接收isChecked作为prop（Vue3用法）
   isChecked: {
     type: Boolean,
@@ -9,13 +9,17 @@ const props = defineProps({
   },
 })
 
+
 //定义update:isChecked事件，用于把新值传递给父组件
 const emit = defineEmits(['update:isChecked'])
 
 //当input发生变化时，emit出新值
-function onChange(event) {
-  emit('update:isChecked', event.target.checked)
+function onChange(event: Event) {
+  const input = event.target as HTMLInputElement
+  emit('update:isChecked', input.checked)
 }
+
+
 </script>
 <template>
   <div>

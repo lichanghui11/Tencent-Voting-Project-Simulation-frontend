@@ -48,7 +48,16 @@ const router = createRouter({
       name: 'login', 
       component: () => import('../views/PleaseLogin.vue')
     }, 
-    
+    {
+      path: '/my-settings',
+      name:'my-settings',
+      component: () => import('../views/MySettings.vue')
+    },
+    {
+      path: '/set-name', 
+      name: 'set-name',
+      component: () => import('../views/SetName.vue')
+    },
   ],
 })
 

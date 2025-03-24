@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue'
 
 defineProps({
   //接收isChecked作为prop（Vue3用法）

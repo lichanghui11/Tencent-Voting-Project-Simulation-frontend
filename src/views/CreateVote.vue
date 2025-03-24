@@ -127,13 +127,11 @@ async function create() {
   }
   const res = await axios.post('/vote', voteInfo)
   if (isLogin) {
-    debugger
     //登录成功
     const id = res.data.result.voteId
     router.replace('/vote/' + id)
     console.log('发送过去的数据： ', JSON.parse(res.config.data))
   } else {
-    debugger
     router.push('/login?next=' + route.fullPath)
   }
 }

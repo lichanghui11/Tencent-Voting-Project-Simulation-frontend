@@ -52,12 +52,11 @@ const name = ref('')
 const next = (route.query.next ?? '/') as string
 async function login() {
   try {
-    debugger
     const user = await axios.post('/account/login', {
       name: name.value,
       password: password.value,
     })
-    userStore.user = user.data.result
+    userStore.user = user.data
     console.log('查看store里面的数据： ', userStore)
     router.replace(next)
   } catch (e) {

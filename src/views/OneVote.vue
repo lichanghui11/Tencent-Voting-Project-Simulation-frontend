@@ -19,11 +19,11 @@
     </div>
 
     <ul class=" bg-[#f2f4f7] space-y-4">
-      <li v-for="(option, i) of options" :key="i" class="relative flex items-center gap-2 h-12 px-4 bg-white shadow" @click="handleOptClick">
+      <li v-for="(option, i) of options" :key="i" class="relative flex items-center gap-2 h-12 px-4 bg-white shadow" @click="handleOptClick(option.optionId)">
         <span>{{ option.content}}</span>
         <span v-if="isVotedByCurrentUser[option.optionId]" class="text-[#3a6bea]"><el-icon><Select /></el-icon></span>
-        <span class="ml-auto">{{ eachOptVotes[option.optionId].length }}票</span>
-        <span>{{ eachOptPercentage[option.optionId] }}</span>
+        <span class="ml-auto">{{ eachOptVotes[option.optionId]?.length || 0}}票</span>
+        <span class="w-14 text-right">{{ eachOptPercentage[option.optionId] }}</span>
         <div class="absolute h-[2px] bg-[#3a6bea] bottom-0" :style="{width: eachOptPercentage[option.optionId]}"></div>
       </li>
     </ul>
@@ -59,7 +59,7 @@ console.log('是否登录: ',useLogin())
 const route = useRoute()
 const id = route.params.id
 const res = await axios.get('/vote/' + id)
-const currentVoteInfo = res.data.result; //拿到当前投票的所有信息
+const currentVoteInfo = reactive(res.data.result); //拿到当前投票的所有信息
 console.log('当前投票的所有信息: ', res.data.result)
 const data = reactive(res.data.result.vote)
 const options = ref(res.data.result.options)
@@ -82,30 +82,28 @@ const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}`;
 //=====================这里写投票逻辑
 
 //类型
-type Vote = {
-  voteId: number, 
-  userId: number,
-  title: string, 
-  desc: string, 
-  deadline: string, 
-  anonymous: string | number,
-  multiple: string | number,
-}
-type Option = {
-  optionId: number, 
-  content: string,
-}
-type Options = Option[]
+// type Vote = {
+//   voteId: number, 
+//   userId: number,
+//   title: string, 
+//   desc: string, 
+//   deadline: string, 
+//   anonymous: string | number,
+//   multiple: string | number,
+// }
+// type Option = {
+//   optionId: number, 
+//   content: string,
+// }
+// type Options = Option[]
 type UserVote = {
   optionId: number |string, 
   avatar: string | null, 
   userId: number | string,
 }
-type UserVotes = UserVote[]
+// type UserVotes = UserVote[]
 // ---------------------------------------------------------
 
-const isAnonymous = currentVoteInfo.vote.anonymous === 1 //是否匿名
-const isMultile = currentVoteInfo.vote.multiple === 1 //是否多选
 console.log('所有的选项： ', currentVoteInfo.options)
 console.log('这个投票的信息： ', currentVoteInfo.vote)
 console.log('每个选项的用户投票情况： ', currentVoteInfo.userVotes)
@@ -127,7 +125,6 @@ const eachOptVotes = computed(() => {
 console.log('eachOptVotes: ', eachOptVotes.value)
 
 
-
 type CurrentOptPercentage = Record<string, string>
 const eachOptPercentage = computed(() => {
   //计算每个选项的得票数占总人数的比例:      得票数 / 总人数
@@ -137,7 +134,7 @@ const eachOptPercentage = computed(() => {
   for (const [key, val] of Object.entries(eachOptVotes.value)) {
     // console.log('key: ', key)
     // console.log('val: ', val)
-    debugger
+    
     currentOptPercentage[key] = (val.length / totalPeople * 100).toFixed(2) + '%'
   }
   return currentOptPercentage
@@ -155,7 +152,6 @@ const isVotedByCurrentUser = computed(() => {
   const currentUserVotes:CurrentUserVotes = {}
   for (const key in eachOptVotes.value) {
     const currentOpt = eachOptVotes.value[key] as unknown as UserVote[]
-    debugger
     currentUserVotes[key] = currentOpt.some((it:UserVote) => it.userId === voteStore.user?.userId)
   }
     
@@ -166,7 +162,7 @@ console.log('is voted by current user: ', isVotedByCurrentUser.value)
 
 const isButtonShow = computed(() => {
   //计算什么条件应该显示完成按钮
-  if (!isAnonymous) {
+  if (currentVoteInfo.vote.anonymous) {
     //非匿名不显示
     return false
   }
@@ -176,7 +172,7 @@ const isButtonShow = computed(() => {
     return false
   }
   const voted = Object.values(isVotedByCurrentUser.value)
-  if (isAnonymous && voted.some(it => it === true)) {
+  if (currentVoteInfo.vote.anonymous && voted.some(it => it === true)) {
     //匿名且已经投过票不显示
     //匿名只有一次投票机会
     return false 
@@ -186,17 +182,25 @@ const isButtonShow = computed(() => {
 })
 console.log('should button show: ', isButtonShow.value)
 
-function handleOptClick() {
-  if (!isMultile) {
-    //单选逻辑
-
+async function handleOptClick(id:number) {
+  if (currentVoteInfo.vote.anonymous) {
+    //非匿名逻辑
+    //选中即投票
+    console.log('要投票的id: ', id )
+    axios.post('/vote/' + currentVoteInfo.vote.voteId, {
+      optionIds: id
+    })
   } else {
-    //多选逻辑
+    //匿名逻辑
+    //先选中， 记录选中的项目， 点击按钮提交
 
   }
 }
 
-
+for (const a in isVotedByCurrentUser.value) {
+  console.log('每个选项编号： ', a)
+  console.log('每个选项当前用户的投票状况： ', isVotedByCurrentUser.value[a])
+}
 
 
 

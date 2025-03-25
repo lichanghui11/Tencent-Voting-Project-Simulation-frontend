@@ -57,15 +57,10 @@ async function login() {
       password: password.value,
     })
     userStore.user = user.data
-    console.log('查看store里面的数据： ', userStore)
     router.replace(next)
   } catch (e) {
     alert('登录失败')
     console.log('登录失败的错误: ', e)
   }
 }
-console.log('userStore里面的user数据： ', userStore.user)
-console.log('下一个页面: ', route.query.next)
-
-
 </script>

@@ -66,7 +66,7 @@
       </div>
       <div class="h-[50px] border-b-[1px] border-[#dddfe7] flex justify-between items-center">
         匿名投票
-        <SliderSwitch v-model="anonymous" />
+        <SliderSwitch :isChecked="anonymous" @update:isChecked="$event => anonymous = $event" v-model="anonymous" />
       </div>
     </div>
 
@@ -88,15 +88,12 @@
 import { useRoute, useRouter } from 'vue-router'
 import { ref, computed } from 'vue'
 import SliderSwitch from './SliderSwitch.vue'
-import { useVoteStore } from '@/stores/vote.ts'
 import axios from 'axios'
 import { useLogin } from '../hooks.ts'
 
 const route = useRoute()
 const router = useRouter()
 const type = computed(() => (route.query.type === 'single' ? '单选' : '多选'))
-const voteStore = useVoteStore()
-console.log('用户登录信息： ', voteStore.user)
 
 
 const options = ref([''])
@@ -117,6 +114,20 @@ const multiple = computed(() => type.value === '多选')
 
 const isLogin =  useLogin()
 async function create() {
+  //判断标题、选项是否为空？ 是否只有一个选项？这两种情况都不允许提交
+  //title.value options.value
+  if (title.value.trim() === '') {
+    alert('标题不能为空！')
+    return 
+  }
+  if (options.value.length < 2) {
+    alert('选项不能只有一个！')
+    return 
+  }
+  if (options.value[0] === '' || options.value[1] === '') {
+    alert('选项内容不能为空！')
+    return 
+  }
   const voteInfo = {
     title: title.value,
     desc: description.value,
@@ -130,10 +141,9 @@ async function create() {
     //登录成功
     const id = res.data.result.voteId
     router.replace('/vote/' + id)
-    console.log('发送过去的数据： ', JSON.parse(res.config.data))
   } else {
     router.push('/login?next=' + route.fullPath)
   }
 }
-// console.log('当前组件的完整路径: ', route.fullPath)
+//给SliderSwitch绑定v-model事件
 </script>

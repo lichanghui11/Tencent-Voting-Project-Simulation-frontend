@@ -56,7 +56,6 @@ import { useLogin } from '../hooks.ts'
 useLogin()
 const res = await axios.get('/vote')
 const myVotes = res.data.result
-console.log(myVotes)
 
 
 const [currentI, setCurrentI] = useCurrentI()

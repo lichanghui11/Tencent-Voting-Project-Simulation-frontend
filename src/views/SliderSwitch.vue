@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-defineProps({
+const props = defineProps({
   //接收isChecked作为prop（Vue3用法）
   isChecked: {
     type: Boolean,
@@ -23,7 +23,7 @@ function onChange(event: Event) {
 <template>
   <div>
     <label class="switch">
-      <input type="checkbox" :checked="isChecked" @change="onChange" />
+      <input type="checkbox" :checked="props.isChecked" @change="onChange" />
       <span class="slider"></span>
     </label>
   </div>

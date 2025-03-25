@@ -14,7 +14,7 @@ export const useVoteStore = defineStore('vote', () => {
   async function getUserInfo() {
     try {
       const userInfo = await axios.get('http://192.168.3.11:3000/account/current-user')
-      user.value = userInfo.data
+      user.value = userInfo.data.result
     } catch (e) {
       const err = e as AxiosError
       if (err.isAxiosError) {

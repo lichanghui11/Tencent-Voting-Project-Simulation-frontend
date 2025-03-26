@@ -56,7 +56,11 @@ import { useLogin } from '../hooks.ts'
 useLogin()
 const res = await axios.get('/vote')
 const myVotes = res.data.result
+console.log('my votes: ', myVotes)
+// function getVoteFolks(voteId) {
+//   //拿到每个vote 的投票参与人数
 
+// }
 
 const [currentI, setCurrentI] = useCurrentI()
 

@@ -11,7 +11,7 @@ import { RouterLink } from 'vue-router'
         >
           <RouterLink
             active-class="active-link"
-            class="basis-0 grow flex flex-1 flex-col items-center hover:text-[#00bd73]"
+            class="basis-0 grow flex flex-1 flex-col items-center hover:text-[#3a6bea]"
             to="/vote-type"
           >
             <div><el-icon :size="20"><DocumentAdd /></el-icon></div>
@@ -19,7 +19,7 @@ import { RouterLink } from 'vue-router'
           </RouterLink>
           <RouterLink
             active-class="active-link"
-            class="basis-0 grow flex flex-1 flex-col items-center hover:text-[#00bd73]"
+            class="basis-0 grow flex flex-1 flex-col items-center hover:text-[#3a6bea]"
             to="/me"
           >
             <div class="">
@@ -34,6 +34,6 @@ import { RouterLink } from 'vue-router'
 
 <style scoped>
 .active-link {
-  color: #00bd7e;
+  color: #3a6bea;
 }
 </style>

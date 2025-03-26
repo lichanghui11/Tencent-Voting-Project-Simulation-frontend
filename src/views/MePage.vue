@@ -12,16 +12,16 @@
     <div class="flex flex-col bg-white ">
       <RouterLink
         to="/my-votes"
-        class="h-[50px] pl-4 hover:text-[#00bd73] border-b-[1px] border-[#f2f4f7] leading-[50px]"
+        class="h-[50px] pl-4 hover:text-[#3a6bea] border-b-[1px] border-[#f2f4f7] leading-[50px]"
       >
         我的投票
         <span class="absolute right-[40px]"><el-icon><ArrowRightBold /></el-icon></span>
       </RouterLink>
-      <RouterLink to="/my-settings" class=" h-[50px] pl-4 hover:text-[#00bd73] border-b-[1px] border-[#f2f4f7] leading-[50px]">
+      <RouterLink to="/my-settings" class=" h-[50px] pl-4 hover:text-[#3a6bea] border-b-[1px] border-[#f2f4f7] leading-[50px]">
         个人设置
         <span class="absolute right-[40px]"><el-icon><ArrowRightBold /></el-icon></span>
       </RouterLink>
-      <RouterLink to="" class="h-[50px] pl-4  hover:text-[#00bd73] border-b-[1px] border-[#f2f4f7] leading-[50px]">
+      <RouterLink to="" class="h-[50px] pl-4  hover:text-[#3a6bea] border-b-[1px] border-[#f2f4f7] leading-[50px]">
         反馈建议
         <span class="absolute right-[40px]"><el-icon><ArrowRightBold /></el-icon></span>
       </RouterLink>

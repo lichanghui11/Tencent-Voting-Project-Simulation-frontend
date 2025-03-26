@@ -1,7 +1,7 @@
 <template>
   <div class="bg-[#f2f4f7]">
     <div class="text-center pl-4 pb-4 pt-[5px] flex justify-between">
-      <RouterLink to="/create" class="flex items-center justify-center">
+      <RouterLink to="null" @click.prevent="goBack" class="flex items-center justify-center">
         <span class="flex leading-4">
           <el-icon class="mr-2"><ArrowLeftBold /></el-icon>
         </span>
@@ -16,17 +16,28 @@
     </div>
 
     <ul class=" bg-[#f2f4f7] space-y-4">
-      <li v-for="(option, i) of options" :key="i" class="px-4 bg-white shadow" @click="handleOptClick(option.optionId)">
+      <li v-for="(option, i) of options" :key="i" class="bg-white">
 
-        <div class="relative flex items-center gap-2 h-12 transition-all">
-          <span>{{ option.content}}</span>
-          <span v-if="optionChecked[option.optionId]" class="text-[#3a6bea]"><el-icon><Select /></el-icon></span>
-          <span v-if="isLoading && isLastClicked ===option.optionId"><LoadingCircle></LoadingCircle></span>
-          <span class="ml-auto">{{ eachOptionVotes[option.optionId]?.length || 0}}票</span>
-          <span class="w-14 text-right">{{ eachOptPercentage[option.optionId] || '0%'}}</span>
-          <div class="absolute h-[2px] bg-[#3a6bea] bottom-0 w-0 transition-all" :style="{width: eachOptPercentage[option.optionId]}"></div>
+        <div class="">
+
+          <div class="px-4 relative flex items-center gap-2 h-12 transition-all shadow" @click="handleOptClick(option.optionId)">
+            <span>{{ option.content}}</span>
+            <span v-if="optionChecked[option.optionId]" class="text-[#3a6bea]"><el-icon><Select /></el-icon></span>
+            <span v-if="isLoading && isLastClicked ===option.optionId"><LoadingCircle></LoadingCircle></span>
+            <span class="ml-auto">{{ eachOptionVotes[option.optionId]?.length || 0}}票</span>
+            <span class="w-14 text-right">{{ eachOptPercentage[option.optionId] || '0%'}}</span>
+
+            <div class="absolute h-[2px] bg-[#3a6bea] bottom-0 w-0 transition-all" :style="{width: eachOptPercentage[option.optionId]}"></div>
+            
+          </div>
+
+          <!-- 这里显示头像 -->
+          <div class=" flex flex-wrap gap-[8px] py-2 bg-[#f2f4f7] px-4" ref="container">
+            <span v-for="(user) of handleAvatarVisible(i)" :key="user" class=" w-[24px] h-[24px] rounded-full inline-block bg-white "> <img :src="user.avatar" alt=""></span> 
+            <span class="w-6 h-6 rounded-full flex items-center justify-center bg-white" @click="isAvatarVisible[i] = !isAvatarVisible[i]"><el-icon><More /></el-icon></span>
+          </div>
+        
         </div>
-
       </li>
     </ul>
 
@@ -50,12 +61,14 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
-import {reactive, ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import {reactive, ref, computed, onMounted, useTemplateRef, onUnmounted } from 'vue'
 import axios from 'axios'
 import { useLogin } from '../hooks.ts'
 import { useVoteStore } from '@/stores/vote.ts'
 import LoadingCircle from './LoadingCircle.vue'
+import { useElementSize } from '@vueuse/core'
+// import {useWindowSize} from '../hooks.ts'
 
 useLogin()
 const route = useRoute()
@@ -289,7 +302,7 @@ function submit() {
 const isDisabled = computed(() => {
   //如果没有选项被选中，提交按钮就是灰色的
   if (selectedOptionIds.value.length < 1) {
-    return true 
+    return true
     //如果已经投过了，提交按钮是灰色的
   } else {
     return false 
@@ -298,6 +311,49 @@ const isDisabled = computed(() => {
 
 //使用web socket实时连接
 onMounted(() => {
-  const ws = new WebSocket(`ws://${location.host}/realtime-voteinfo${id}`)
+  const ws = new WebSocket(`ws://${location.host}/realtime-voteinfo/${id}`)
+  //ws连接成功后，每个设备更新的消息都能在每个设备查看到，
+  console.log('web socket: ', ws)
+  ws.onmessage = (e) => {
+    const userVotes = JSON.parse(e.data)
+    //将这个消息更新到当前信息就可以实现实时更新
+    currentVoteInfo.userVotes = userVotes
+  }
+
+  onUnmounted(() => {
+    ws.close()
+  })
 })
+
+//摆放头像
+const container = useTemplateRef('container')
+const { width } = useElementSize(container)
+// const  width = useWindowSize()
+const isAvatarVisible = ref<boolean[]>(new Array(currentVoteInfo.options.length).fill(false)) //所有选项默认不展开
+
+const avaterCounts = computed((): number => {
+  return Math.floor(width.value / (32))
+})
+
+function handleAvatarVisible(i: number) {
+  const { optionId } = currentVoteInfo.options[i]
+  if (isAvatarVisible.value[i]) {
+    //如果为展开状态
+    return eachOptionVotes.value[optionId]
+  } else {
+    return eachOptionVotes.value[optionId]?.slice(0, avaterCounts.value - 1)
+  }
+}
+
+//如果没有人投票，最后不显示三个点
+// const isTreePoints = computed(() => {
+// })
+
+//左上角返回上一个页面
+const router = useRouter()
+function goBack() {
+debugger  
+  router.back()
+}
+
 </script>

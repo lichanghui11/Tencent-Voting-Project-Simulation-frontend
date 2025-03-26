@@ -1,6 +1,7 @@
-import { ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { useVoteStore } from './stores/vote'
 import { useRoute, useRouter } from 'vue-router'
+
 
 export function useCurrentI() {
   const currentI = ref(-1)
@@ -25,4 +26,24 @@ export function useLogin() {
   } 
 
   return true
+}
+let isSubscribed = false 
+const width = ref({
+  width: window.innerWidth,
+})
+function handleWindowEvent() {
+  width.value.width = window.innerWidth
+}
+export function useWindowSize() {
+  //根据父元素的宽度来摆放头像的个数
+  if (!isSubscribed) {
+    isSubscribed = true
+    onMounted(() => {
+      window.addEventListener('resize', handleWindowEvent)
+    })
+    onUnmounted(() => {
+      window.removeEventListener('resize', handleWindowEvent)
+    })
+  }
+  return width
 }

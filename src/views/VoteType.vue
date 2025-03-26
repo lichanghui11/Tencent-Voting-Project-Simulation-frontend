@@ -1,12 +1,12 @@
 <template>
   <div>
     <!-- <h1 class="text-center h-[50px] my-0 font-bold pt-2 text-black">腾讯投票</h1> -->
-    <NavBar :title="`腾讯投票`" class="!bg-[#f2f4f7]" />
+    <NavBar :title="`腾讯投票`" class="!bg-[#f2f4f7] !pb-0" />
 
     <div class="bg-[#f2f4f7]">
       <RouterLink
         to="/create?type=single"
-        class="flex flex-col mb-4 text-white bg-white h-[250px]"
+        class="flex flex-col mb-2 text-white bg-white h-[250px]"
       >
         <span class="text-center text-[100px] my-3">📗</span>
         <div class="flex items-center justify-center">

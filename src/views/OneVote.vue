@@ -160,15 +160,15 @@ const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}`;
 //=====================这里写投票逻辑
 
 //类型
-// type Vote = {
-//   voteId: number,
-//   userId: number,
-//   title: string,
-//   desc: string,
-//   deadline: string,
-//   anonymous: string | number,
-//   multiple: string | number,
-// }
+export type Vote = {
+  voteId: number,
+  userId: number,
+  title: string,
+  desc: string,
+  deadline: string,
+  anonymous: string | number,
+  multiple: string | number,
+}
 // type Option = {
 //   optionId: number,
 //   content: string,

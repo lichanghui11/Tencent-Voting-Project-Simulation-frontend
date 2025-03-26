@@ -17,6 +17,7 @@
     "@tailwindcss/vite": "^4.0.15",
     "@vueuse/core": "^13.0.0",
     "axios": "^1.8.4",
+    "copy-to-clipboard": "^3.3.3",
     "element-plus": "^2.9.7",
     "multer": "1.4.5-lts.2",
     "pinia": "^3.0.1",

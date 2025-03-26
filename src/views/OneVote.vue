@@ -25,6 +25,7 @@
       >
       <span
         class="absolute block bg-[#3a6bea] text-white w-[45px] h-[45px] rounded-full text-center leading-[45px] text-[40px] right-[16px] top-[10px]"
+        @click="copyLink"
         ><el-icon><Share /></el-icon
       ></span>
     </div>
@@ -106,7 +107,7 @@ import { useVoteStore } from "@/stores/vote.ts";
 import LoadingCircle from "./LoadingCircle.vue";
 import { useElementSize } from "@vueuse/core";
 // import {useWindowSize} from '../hooks.ts'
-import { NavBar } from "vant";
+import { NavBar, showDialog } from "vant";
 
 useLogin();
 const route = useRoute();
@@ -396,6 +397,59 @@ function handleAvatarVisible(i: number) {
 
 //左上角返回上一个页面
 const onClickLeft = () => history.back();
+
+// 设置复制链接的弹出框
+function copyLink() {
+  const currentUrl = window.location.href
+
+  // 尝试使用 Clipboard API（需要 HTTPS）
+  if (navigator.clipboard) {
+    navigator.clipboard
+      .writeText(currentUrl)
+      .then(() => {
+        // 复制成功
+        showDialog({
+          title: '成功',
+          message: '链接已成功复制！',
+        })
+      })
+      .catch(() => {
+        // 复制失败
+        showDialog({
+          title: '失败',
+          message: '复制失败，请重试。',
+        })
+      })
+  } else {
+    // 如果 Clipboard API 不支持，使用旧方法（document.execCommand）
+    const input = document.createElement('input')
+    input.value = currentUrl
+    input.style.position = 'absolute'
+    input.style.left = '-9999px'
+    document.body.appendChild(input)
+    input.select() //选中内容
+    input.setSelectionRange(0, 99999) // 为了兼容移动端
+    try {
+      const successful = document.execCommand('copy')
+      if (successful) {
+        showDialog({
+          title: '成功',
+          message: '链接已成功复制！',
+        })
+      } else {
+        throw new Error('复制失败')
+      }
+    } catch {
+      showDialog({
+        title: '失败',
+        message: '复制失败，请重试。',
+      })
+    }
+    document.body.removeChild(input)
+  }
+}
+
+
 </script>
 <style>
 :root {

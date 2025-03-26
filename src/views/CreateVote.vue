@@ -1,15 +1,21 @@
 <template>
   <div>
     <div class="bg-white">
-      <div class="text-center pl-4 pb-4 pt-[5px] flex">
-        <RouterLink to="/vote-type" class="flex items-center justify-center">
+      <div class="text-center px-4 pt-[5px]">
+        <NavBar
+          :title="`创建${type}投票`"
+          left-arrow
+          @click-left="onClickLeft"
+          class=""
+        />
+        <!-- <RouterLink to="/vote-type" class="flex items-center justify-center">
           <span class="flex leading-4">
             <el-icon class="mr-2"><ArrowLeftBold /></el-icon>
           </span>
           <span class="flex items-center justify-center font-bold"
             >创建{{ type }}投票</span
           >
-        </RouterLink>
+        </RouterLink> -->
       </div>
 
       <div class="flex flex-col space-y-2 pl-4 pr-4">
@@ -67,7 +73,6 @@
         <Popup round :show="show" position="bottom">
           <PickerGroup
             title="截止时间"
-            ·
             :tabs="['选择日期', '选择时间']"
             @confirm="show = false"
           >
@@ -103,7 +108,7 @@
 
     <div class="text-center bg-[#f2f4f7] pb-[20px]">
       <button
-        class="hover:text-[#00bd7e] px-10 py-2 bg-[#3a6bea] text-white rounded mt-[30px] w-7/8 mx-auto ml-auto"
+        class="cursor-pointer px-10 py-2 bg-[#3a6bea] !text-white rounded mt-[30px] w-7/8 mx-auto ml-auto"
         @click="create"
       >
         完成
@@ -118,7 +123,7 @@ import { ref, computed } from "vue";
 import SliderSwitch from "./SliderSwitch.vue";
 import axios from "axios";
 import { useLogin } from "../hooks.ts";
-import { TimePicker, Popup, DatePicker, PickerGroup } from "vant";
+import { TimePicker, Popup, DatePicker, PickerGroup, NavBar } from "vant";
 
 const route = useRoute();
 const router = useRouter();
@@ -206,4 +211,13 @@ async function create() {
 
 //自定义vant的日期选择器
 const show = ref(false);
+const onClickLeft = () => history.back();
+//顶部导航栏
 </script>
+
+<style>
+:root {
+  --van-padding-md: 0;
+  --van-nav-bar-icon-color: #3a6bea;
+}
+</style>

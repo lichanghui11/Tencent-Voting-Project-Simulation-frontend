@@ -96,7 +96,7 @@ const confirmedPassword = ref('')
 const tel = ref('')
 const email = ref('')
 const captcha = ref('')
-const avatarUrl = ref(null)
+const avatarUrl = ref('')
 
 
 //获取验证码图片
@@ -123,15 +123,31 @@ function handleFileChange(e: any) {
 
 const router = useRouter()
 async function register() {
-  const res = await axios.post('/api/register', {
-    accountName: accountName.value, 
-    password: password.value, 
-    confirmedPassword: confirmedPassword.value, 
-    email: email.value, 
-    tel: tel.value,
-    captcha: captcha.value,
-    avatarUrl: avatarUrl.value,
-  })
+
+const formData = new FormData();
+formData.append("avatarUrl", avatarUrl.value);  // 文件字段
+formData.append("accountName", accountName.value);
+formData.append("password", password.value);
+formData.append("confirmedPassword", confirmedPassword.value);
+formData.append("email", email.value);
+formData.append("tel", tel.value);
+formData.append("captcha", captcha.value);
+
+const res = await axios.post('/api/register', formData, {
+  headers: {
+    'Content-Type': 'multipart/form-data'
+  }
+});
+
+  // const res = await axios.post('/api/register', {
+  //   accountName: accountName.value, 
+  //   password: password.value, 
+  //   confirmedPassword: confirmedPassword.value, 
+  //   email: email.value, 
+  //   tel: tel.value,
+  //   captcha: captcha.value,
+  //   avatarUrl: avatarUrl.value,
+  // })
   //这里需要根据请求返回的信息处理对应的提示{code: -1, msg}
   const msg = res.data
 

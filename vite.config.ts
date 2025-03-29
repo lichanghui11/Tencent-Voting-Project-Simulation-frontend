@@ -42,7 +42,7 @@ export default defineConfig({
         ws: true,
       },
       '/api': {
-        target: 'http://localhost:6789', // 后端验证码路径
+        target: 'http://localhost:6789', // 后端路径
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },

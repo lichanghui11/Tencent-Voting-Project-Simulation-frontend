@@ -21,10 +21,6 @@
         个人设置
         <span class="absolute right-[40px]"><el-icon><ArrowRightBold /></el-icon></span>
       </RouterLink>
-      <RouterLink to="/all-votes" class="h-[60px] pl-4  hover:text-[#3a6bea] border-b-[1px] border-[#f2f4f7] leading-[60px]">
-        所有投票
-        <span class="absolute right-[40px]"><el-icon><ArrowRightBold /></el-icon></span>
-      </RouterLink>
     </div>
   </div>
 </template>

@@ -1,15 +1,12 @@
 <template>
-  <div class="text-center">
+  <div class="relative">
+  <div class="text-center px-4 ">
+    <NavBar :title="`欢迎登录本投票应用`" class="nav-bar !bg-[#f2f4f7] shadow"></NavBar>
 
-    <div class="mt-[100px] text-[40px]">✅</div>
-    <div class="text-3xl font-[800] mt-[10px]">来投票吧</div>
-    <div class="mt-[50px]">请登录投票应用</div>
-    <div class="mt-[20px]">以保证各项功能正常使用</div>
-
-    <table class="mt-[40px] mx-auto">
+    <table class="mx-auto text-[16px] mt-[100px]">
       <tbody>
-        <tr>
-          <td width="100" align="right">账户名:</td>
+        <tr class="h-[50px] leading-[50px]">
+          <td width="100" align="right" class="px-4">账户名:</td>
           <td width="auto" align="left">
             <input
               type="text"
@@ -18,8 +15,8 @@
             />
           </td>
         </tr>
-        <tr>
-          <td width="100" align="right">密码:</td>
+        <tr class="h-[50px] leading-[50px]">
+          <td width="100" align="right" class="px-4">密码:</td>
           <td width="auto" align="left">
             <input
               type="password"
@@ -31,11 +28,12 @@
       </tbody>
     </table>
 
-    <div colspan="2" width="auto" align="center" class="bg-[#e3f2fd] py-[8px] rounded-[5px] mt-[30px]">
+    <div class="bg-[#3a6bea] text-white py-[8px] rounded-[5px] mt-[90px]">
       <button class="w-full" @click="login">登录</button>
-    </div>
-    <RouterLink to="/register">注册</RouterLink>
+    </div>没有账号？
+    <RouterLink to="/register" class=""><span class="border-b-1 shadow">去注册</span></RouterLink>
   </div>
+</div>
 </template>
 
 <script setup lang="ts">
@@ -43,7 +41,7 @@ import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 import { useVoteStore } from '@/stores/vote'
-
+import { NavBar } from 'vant'
 const route = useRoute()
 const router = useRouter()
 const voteStore = useVoteStore()

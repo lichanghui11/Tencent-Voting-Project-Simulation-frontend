@@ -56,19 +56,23 @@
               ></div>
           </div>
           <!-- 这里显示头像 -->
+          <div>
+          
           <div class="flex flex-wrap gap-[8px] py-2 bg-[#f2f4f7] px-4" ref="container">
             <span
               v-for="user of handleAvatarVisible(i)"
               :key="Math.random().toString()"
               class="w-[24px] h-[24px] rounded-full inline-block bg-white"
             >
-              <img :src="user.avatarUrl" alt=""
+              <img :src="`http://192.168.3.11:3000/api${user.avatarUrl}`" class="rounded-full"
             /></span>
-            <span
+            <span 
+             v-if="hasMore(option.optionId)"
               class="w-6 h-6 rounded-full flex items-center justify-center bg-white"
               @click="isAvatarVisible[i] = !isAvatarVisible[i]"
               ><el-icon><More /></el-icon
             ></span>
+          </div>
           </div>
         </div>
       </li>
@@ -97,7 +101,7 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { reactive, ref, computed, onMounted, useTemplateRef, onUnmounted } from 'vue'
 import axios from 'axios'
 import { useLogin } from '../hooks.ts'
@@ -194,7 +198,7 @@ const eachOptionVotes = computed(() => {
   }
   return currentOptionVotes
 })
-console.log('每个选项的投票情况： ', eachOptionVotes.value)
+console.log('每个选项的投票情况： eachOptionVotes', eachOptionVotes.value)
 
 type CurrentOptPercentage = Record<string, string>
 const eachOptPercentage = computed(() => {
@@ -340,15 +344,12 @@ function submit() {
 
 //使用web socket实时连接
 onMounted(() => {
-  console.log('...................id: ', id)
   const ws = new WebSocket(`ws://${location.host}/realtime-voteinfo/${id}`)
   //ws连接成功后，每个设备更新的消息都能在每个设备查看到，
-  console.log('web socket: ', ws)
   ws.onmessage = (e) => {
     const userVotes = JSON.parse(e.data)
     //将这个消息更新到当前信息就可以实现实时更新
     currentVoteInfo.userVotes = userVotes
-    console.log('wssssssss: ', currentVoteInfo.useVotes)
   }
 
   onUnmounted(() => {
@@ -376,12 +377,25 @@ function handleAvatarVisible(i: number) {
   }
 }
 
+//控制显示更多的头像的展开符号
+const hasMore = (optionId: string) => {
+  debugger
+  if (eachOptionVotes.value[optionId]) {
+    console.log(eachOptionVotes.value)
+    return true
+  } else {
+    return false
+  }
+}
+
 //如果没有人投票，最后不显示三个点
 // const isTreePoints = computed(() => {
 // })
 
 //左上角返回上一个页面
-const onClickLeft = () => history.back()
+
+const router = useRouter()
+const onClickLeft = () => router.push('/vote-type')
 
 // 设置复制链接的弹出框
 function copyLink() {

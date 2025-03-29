@@ -13,6 +13,7 @@
             />
           </td>
         </tr>
+
         <tr>
           <td width="100" align="right">密码:</td>
           <td width="auto" align="left">
@@ -23,7 +24,8 @@
             />
           </td>
         </tr>
-         <tr>
+
+        <tr>
           <td width="100" align="right">确认密码:</td>
           <td width="auto" align="left">
             <input
@@ -33,7 +35,8 @@
             />
           </td>
         </tr>
-         <tr>
+
+        <tr>
           <td width="100" align="right">邮箱:</td>
           <td width="auto" align="left">
             <input
@@ -43,6 +46,7 @@
             />
           </td>
         </tr>
+
          <tr>
           <td width="100" align="right">电话:</td>
           <td width="auto" align="left">
@@ -53,7 +57,8 @@
             />
           </td>
         </tr>
-         <tr>
+
+        <tr>
           <td width="100" align="right">头像:</td>
           <td width="auto" align="left">
             <input
@@ -63,22 +68,25 @@
             />
           </td>
         </tr>
-         <tr>
+
+        <tr>
           <td width="100" align="right">你是机器人吗？</td>
           <td width="auto" align="left">
-            <img :src="svgImg" alt="验证码" @click="reloadCaptcha">
+            <img :src="svgImg" alt="验证码" @click="reloadCaptcha" />
           </td>
         </tr>
+
         <tr>
           <td width="100" align="right">输入验证码:</td>
           <td width="auto" align="left">
-            <input type="text" v-model="captcha">
+            <input type="text" v-model="captcha"/>
           </td>
         </tr>
+        
       </tbody>
     </table>
 
-    <div colspan="2" width="auto" align="center" class="bg-[#e3f2fd] py-[8px] rounded-[5px] mt-[30px]">
+    <div class="bg-[#e3f2fd] py-[8px] rounded-[5px] mt-[30px]">
       <button class="w-full" @click="register">注册</button>
     </div>
   </div>
@@ -124,6 +132,7 @@ function handleFileChange(e: any) {
 const router = useRouter()
 async function register() {
 
+//带有文件的表单数据不能使用json格式的数据进行发送
 const formData = new FormData();
 formData.append("avatarUrl", avatarUrl.value);  // 文件字段
 formData.append("accountName", accountName.value);

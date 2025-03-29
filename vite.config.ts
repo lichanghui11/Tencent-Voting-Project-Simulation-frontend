@@ -35,11 +35,16 @@ export default defineConfig({
       //   changeOrigin: true,
       //   rewrite: (path) => path.replace(/^\/api/, ''),
       // },
-      '/account': 'http://localhost:5175',
-      '/vote': 'http://localhost:5175',
+      // '/account': 'http://localhost:5175',
+      // '/vote': 'http://localhost:5175',
       '/realtime-voteinfo': {
-        target: 'ws://localhost:5175',
+        target: 'ws://localhost:6789',
         ws: true,
+      },
+      '/api': {
+        target: 'http://localhost:6789', // 后端验证码路径
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
   },

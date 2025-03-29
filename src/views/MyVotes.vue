@@ -19,7 +19,7 @@
         >
           <div class="flex justify-between">
             <span>{{ vote.title }}</span>
-            <span>9</span>
+            <span class="text-[#bcc1cb] text-[14px]">{{ vote.totalCount !== 0 ? vote.totalCount : 0 }}</span>
           </div>
         </div>
 
@@ -27,13 +27,6 @@
           class="flex basis-0 grow px-4 h-[50px] justify-around items-center border-b-[1px] border-[#f2f4f7] leading-[50px] pb-4 transition-[0.4]"
           :class="{ hidden: currentI !== i }"
         >
-          <RouterLink to="" class="text-[14px] basis-0 grow flex flex-col items-center text-black">
-            <span class="h-[18px] hover:text-[#3a6bea] relative"
-              ><el-icon class="!w-4 !absolute left-1/2 transform -translate-x-1/2"><Edit /></el-icon
-            >编辑</span>
-            
-          </RouterLink>
-
           <RouterLink
             :to="`/vote/${vote.voteId}`"
             class="text-[14px] basis-0 grow flex flex-col items-center text-black"
@@ -80,12 +73,11 @@ import { useCurrentI } from '@/hooks'
 import axios from 'axios'
 import { useLogin } from '../hooks.ts'
 import { NavBar, showConfirmDialog, ActionSheet, showToast} from 'vant'
-import { type Vote } from './OneVote.vue'
 import copy from 'copy-to-clipboard'
 
-const myVotes = ref<Vote[]>([])
+const myVotes = ref([] as any)
 try {
-  const res = await axios.get('/vote')
+  const res = await axios.get('/api/vote')
   myVotes.value = res.data.result
   console.log('my votes: ', myVotes.value)
   // function getVoteFolks(voteId) {
@@ -167,13 +159,13 @@ const actions = ref([
 // }
 const onCancel = () => showToast('取消')
 //删除某个投票
-function deleteVote(vote: Vote, i: number) {
+function deleteVote(vote: any, i: number) {
   showConfirmDialog({
     message: `确认删除 [${vote.title}] 吗？`,
   })
     .then(async () => {
       try {
-        await axios.delete(`/vote/${vote.voteId}`)
+        await axios.delete(`/api/vote/${vote.voteId}`)
         myVotes.value.splice(i, 1)
         setCurrentI(-1)
       } catch (e) {

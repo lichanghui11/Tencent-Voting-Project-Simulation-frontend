@@ -34,6 +34,7 @@
     <div colspan="2" width="auto" align="center" class="bg-[#e3f2fd] py-[8px] rounded-[5px] mt-[30px]">
       <button class="w-full" @click="login">登录</button>
     </div>
+    <RouterLink to="/register">注册</RouterLink>
   </div>
 </template>
 
@@ -45,18 +46,19 @@ import { useVoteStore } from '@/stores/vote'
 
 const route = useRoute()
 const router = useRouter()
-const userStore = useVoteStore()
+const voteStore = useVoteStore()
 
 const password = ref('')
 const name = ref('')
 const next = (route.query.next ?? '/') as string
 async function login() {
   try {
-    const user = await axios.post('/account/login', {
-      name: name.value,
+    const user = await axios.post('/api/login', {
+      accountName: name.value,
       password: password.value,
     })
-    userStore.user = user.data
+    console.log(user.data)
+    voteStore.user = user.data.result
     router.replace(next)
   } catch (e) {
     alert('登录失败')

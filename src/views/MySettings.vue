@@ -17,14 +17,14 @@
     
     <div class="flex justify-center h-[20vh] mt-4">
       <span class="rounded-full">
-        <img src="https://dummyimage.com/50x50/3a6bea/bccecb" alt="头像" class="rounded-full w-[100px]"/>
+        <img :src="avatar" alt="头像" class="rounded-full w-[100px]"/>
       </span>
     </div>
 
     <RouterLink to="/set-name" class="bg-white h-[50px] px-4 leading-[50px] flex justify-between">
       <span>昵称</span>
       <span class="flex items-center text-[#bcc1cb]">
-        <span>西瓜🍉</span>
+        <span>{{currentUser?.accountName || '未登录'}}</span>
         <span class="flex items-center"><el-icon class="mr-2"><ArrowRightBold /></el-icon></span>
       </span>
     </RouterLink>
@@ -44,15 +44,23 @@ import axios from 'axios';
 import { useRouter } from 'vue-router'
 import { useLogin } from '../hooks.ts'
 import { NavBar } from 'vant'
+import { ref } from 'vue';
 
 useLogin()
 const router = useRouter()
 const voteStore = useVoteStore()
 async function logout() {
-  await axios.get('/account/logout') 
+  await axios.get('/api/logout') 
   voteStore.user = null
 
   router.push('/')
 }
 const onClickLeft = () => history.back();
+
+//拿到登录用户
+const currentUser = voteStore.user
+
+const avatar = ref('')
+const avatarPath = currentUser?.avatarUrl 
+avatar.value = avatarPath ? ('http://192.168.3.11:3000/api' + avatarPath) : 'https://dummyimage.com/50x50/3a6bea/bccecb'
 </script>

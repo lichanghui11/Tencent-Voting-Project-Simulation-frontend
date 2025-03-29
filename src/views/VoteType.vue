@@ -16,7 +16,7 @@
         </div>
       </RouterLink>
       <RouterLink
-        to="create?type=multiple"
+        to="/create?type=multiple"
         class="flex flex-col text-white bg-white h-[250px]"
       >
         <span class="text-center text-[100px] my-3">📚</span>

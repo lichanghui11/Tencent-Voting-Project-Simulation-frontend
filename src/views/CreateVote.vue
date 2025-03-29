@@ -2,12 +2,7 @@
   <div>
     <div class="bg-white">
       <div class="text-center px-4 pt-[5px]">
-        <NavBar
-          :title="`创建${type}投票`"
-          left-arrow
-          @click-left="onClickLeft"
-          class=""
-        />
+        <NavBar :title="`创建${type}投票`" left-arrow @click-left="onClickLeft" />
         <!-- <RouterLink to="/vote-type" class="flex items-center justify-center">
           <span class="flex leading-4">
             <el-icon class="mr-2"><ArrowLeftBold /></el-icon>
@@ -20,33 +15,30 @@
 
       <div class="flex flex-col space-y-2 pl-4 pr-4">
         <input
-          class="focus:ring border-b-[1px] my-2 text-[30px] border-[#dddfe7] leading-[50px]"
+          class="focus:ring border-b-[1px] my-2 text-[30px] border-[#f2f4f7] leading-[50px] h-[40px]"
           type="text"
           placeholder="投票标题"
           v-model="title"
         />
         <input
-          class="focus:ring border-b-[1px] my-2 text-[] border-[#dddfe7] leading-[50px]"
+          class="focus:ring border-b-[1px] my-2 text-[] border-[#f2f4f7] leading-[50px] h-[40px]"
           type="text"
           placeholder="补充描述(选填)"
           v-model="description"
         />
-        <div
-          class="flex items-center gap-[10px] w-full"
-          v-for="(option, i) of options"
-          :key="i"
-        >
+        <div class="flex items-center gap-[10px] w-full" v-for="(option, i) of options" :key="i">
           <span
             @click="deleteOption(i)"
             class="pseudo-delete cursor-pointer relative inline-block w-[20px] h-[20px] bg-red-600 rounded-full"
           ></span>
           <input
-            class="focus:ring w-full border-b-[1px] text-xl border-[#dddfe7] leading-[50px]"
+            class="focus:ring w-full border-b-[1px] text-xl border-[#f2f4f7] leading-[50px] h-[40px]"
             type="text"
             placeholder="选项"
             v-model="options[i]"
           />
         </div>
+
         <div
           class="text-[#3a6bea] flex items-center gap-[10px] w-full cursor-pointer h-[50px]"
           @click="addOption"
@@ -62,39 +54,19 @@
     <div class="分割线 h-[40px] bg-[#f2f4f7]"></div>
 
     <div class="space-y-2 bg-white pl-4 pr-4">
-      <div
-        class="h-[50px] border-b-[1px] border-[#dddfe7] flex justify-between items-center"
-      >
+      <div class="h-[50px] border-b-[1px] border-[#f2f4f7] flex justify-between items-center">
         截止日期
 
-        <button @click="show = true">
-          {{ deadDate.join("-") }} {{ deadTime.join(":") }}
-        </button>
+        <button @click="show = true">{{ deadDate.join('-') }} {{ deadTime.join(':') }}</button>
         <Popup round :show="show" position="bottom">
-          <PickerGroup
-            title="截止时间"
-            :tabs="['选择日期', '选择时间']"
-            @confirm="show = false"
-          >
+          <PickerGroup class="px-4" title="截止时间" :tabs="['选择日期', '选择时间']" @confirm="show = false" @cancel="handleCancle">
             <DatePicker v-model="deadDate" />
             <TimePicker v-model="deadTime" />
           </PickerGroup>
         </Popup>
-
-        <!-- <el-date-picker·
-          class=""
-          v-model="deadline"
-          type="datetime"
-          placeholder="请选择截止时间"
-          :editable="false"
-          :popper-append-to-body="true"
-          format="YYYY-MM-DD HH:mm"
-          style="width: 175px"
-        /> -->
       </div>
-      <div
-        class="h-[50px] border-b-[1px] border-[#dddfe7] flex justify-between items-center"
-      >
+
+      <div class="h-[50px] border-b-[1px] border-[#f2f4f7] flex justify-between items-center">
         匿名投票
         <SliderSwitch
           :isChecked="anonymous"
@@ -118,78 +90,88 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute, useRouter } from "vue-router";
-import { ref, computed } from "vue";
-import SliderSwitch from "./SliderSwitch.vue";
-import axios from "axios";
-import { useLogin } from "../hooks.ts";
-import { TimePicker, Popup, DatePicker, PickerGroup, NavBar } from "vant";
+import { useRoute, useRouter } from 'vue-router'
+import { ref, computed } from 'vue'
+import SliderSwitch from './SliderSwitch.vue'
+import axios from 'axios'
+import { useLogin } from '../hooks.ts'
+import { TimePicker, Popup, DatePicker, PickerGroup, NavBar } from 'vant'
+import { useVoteStore } from '@/stores/vote.ts'
 
-const route = useRoute();
-const router = useRouter();
-const type = computed(() => (route.query.type === "single" ? "单选" : "多选"));
+const route = useRoute()
+const router = useRouter()
+const type = computed(() => (route.query.type === 'single' ? '单选' : '多选'))
 
-const options = ref([""]);
-const title = ref("");
-const description = ref("");
+const options = ref([''])
+const title = ref('')
+const description = ref('')
 //根据vant组件库调整日期显示格式
 function getDateArray() {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const today = new Date()
+  const year = today.getFullYear()
+  const month = String(today.getMonth() + 1).padStart(2, '0')
   // 月份从0开始，所以要加1
-  const day = String(today.getDate()).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, '0')
 
-  return [year, month, day];
+  return [year, month, day]
 }
 function getTimeArray() {
-  const today = new Date();
-  const hours = String(today.getHours()).padStart(2, "0"); // 获取小时并格式化为两位
-  const minutes = String(today.getMinutes()).padStart(2, "0"); // 获取分钟并格式化为两位
+  const today = new Date()
+  const hours = String(today.getHours()).padStart(2, '0') // 获取小时并格式化为两位
+  const minutes = String(today.getMinutes()).padStart(2, '0') // 获取分钟并格式化为两位
 
-  return [hours, minutes];
+  return [hours, minutes]
 }
-const date = getDateArray();
+const date = getDateArray()
 // const deadDate = ref(date)
-const deadDate = ref(date);
-const time = getTimeArray();
-const deadTime = ref(time);
+// const deadDate = ref(new Date()) //vant 文档期望的<DatePicker/>类型为：Date对象 / 特定格式字符串 / 数字时间戳
+const deadDate = ref(date) as any
+const time = getTimeArray()
+const deadTime = ref(time)
 
 const deadline = computed(() => {
   //return new Date('2022-02-22 02:22') 这种方式更简便
-  const year = Number(deadDate.value[0]);
-  const month = Number(deadDate.value[1]) - 1; // JavaScript 中的月份从 0 开始
-  const day = Number(deadDate.value[2]);
-  const hours = Number(deadTime.value[0]);
-  const minutes = Number(deadTime.value[1]);
-  return new Date(year, month, day, hours, minutes);
-});
+  const year = Number(deadDate.value[0])
+  const month = Number(deadDate.value[1]) - 1 // JavaScript 中的月份从 0 开始
+  const day = Number(deadDate.value[2])
+  // const year = deadDate.value.getDate()
+  // const month = deadDate.value.getMonth()
+  // const day = deadDate.value.getDay()
+  const hours = Number(deadTime.value[0])
+  const minutes = Number(deadTime.value[1])
+  return new Date(year, month, day, hours, minutes)
+})
 
-const anonymous = ref(false);
+const anonymous = ref(false)
 function addOption() {
-  options.value.push("");
+  options.value.push('')
 }
 function deleteOption(i: number) {
-  options.value.splice(i, 1);
+  options.value.splice(i, 1)
 }
 
-const multiple = computed(() => type.value === "多选");
+const multiple = computed(() => type.value === '多选')
 
-const isLogin = useLogin();
+const isLogin = useLogin()
+console.log('创建投票前的用户登录状态： ', isLogin)
+console.log('创建投票前的用户登录状态： ', useVoteStore().user)
+const voteStore = useVoteStore()
 async function create() {
   //判断标题、选项是否为空？ 是否只有一个选项？这两种情况都不允许提交
   //title.value options.value
-  if (title.value.trim() === "") {
-    alert("标题不能为空！");
-    return;
+  if (title.value.trim() === '') {
+    alert('标题不能为空！')
+    return
   }
   if (options.value.length < 2) {
-    alert("选项不能只有一个！");
-    return;
+    alert('选项不能只有一个！')
+    return
   }
-  if (options.value[0] === "" || options.value[1] === "") {
-    alert("选项内容不能为空！");
-    return;
+  for (let item of options.value) {
+    if (item === '') {
+      alert('选项内容不能为空！')
+      return
+    }
   }
   const voteInfo = {
     title: title.value,
@@ -198,21 +180,24 @@ async function create() {
     anonymous: anonymous.value,
     multiple: multiple.value,
     options: options.value,
-  };
-  const res = await axios.post("/vote", voteInfo);
+  }
+  const res = await axios.post('/api/vote', voteInfo)
   if (isLogin) {
     //登录成功
-    const id = res.data.result.voteId;
-    router.replace("/vote/" + id);
+    const id = res.data.result.voteId
+    router.replace('/vote/' + id)
   } else {
-    router.push("/login?next=" + route.fullPath);
+    router.push('/login?next=' + route.fullPath)
   }
 }
 
 //自定义vant的日期选择器
-const show = ref(false);
-const onClickLeft = () => history.back();
+const show = ref(false)
+const onClickLeft = () => history.back()
 //顶部导航栏
+const handleCancle = () => {
+  show.value = false
+}
 </script>
 
 <style>

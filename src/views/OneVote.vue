@@ -175,7 +175,7 @@ export type Vote = {
 // type Options = Option[]
 type UserVote = {
   optionId: number | string
-  avatar: string | null
+  avatarUrl: string | null
   userId: number | string
 }
 // type UserVotes = UserVote[]
@@ -186,7 +186,7 @@ type UserVote = {
 //   [key: string]: number
 // }
 
-type CurrentOptVotes = Record<string, string[]>
+type CurrentOptVotes = Record<string, UserVote[]>
 const eachOptionVotes = computed(() => {
   //计算每个选项的得票数
   //{选项id: [用户1， 用户2]}
@@ -366,6 +366,7 @@ const isAvatarVisible = ref<boolean[]>(new Array(currentVoteInfo.options.length)
 const avatarCounts = computed((): number => {
   return Math.floor(width.value / 32) - 1
 })
+
 
 function handleAvatarVisible(i: number) {
   const { optionId } = currentVoteInfo.options[i]

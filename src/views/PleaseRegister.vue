@@ -84,7 +84,8 @@
 
     <div class="bg-[#3a6bea] text-white py-[8px] rounded-[5px] mt-[30px]">
       <button class="w-full" @click="register">注册</button>
-    </div>
+    </div>已有账号？
+    <RouterLink to="/login" class=""><span class="border-b-1 shadow">去登录</span></RouterLink>
   </div>
 </template>
 

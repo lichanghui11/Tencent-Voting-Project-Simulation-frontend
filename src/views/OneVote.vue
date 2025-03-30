@@ -111,12 +111,14 @@ import { useElementSize } from '@vueuse/core'
 // import {useWindowSize} from '../hooks.ts'
 import { NavBar, showDialog } from 'vant'
 
-useLogin()
+
 const route = useRoute()
 const id = route.params.id
 const res = await axios.get('/api/vote/' + id)
 const voteStore = useVoteStore()
+const router = useRouter()
 
+useLogin()
 /**
  * currentVoteInfo = {
  *  vote:{
@@ -395,7 +397,6 @@ const hasMore = (optionId: string) => {
 
 //左上角返回上一个页面
 
-const router = useRouter()
 const onClickLeft = () => router.push('/vote-type')
 
 // 设置复制链接的弹出框
@@ -448,6 +449,7 @@ function copyLink() {
     document.body.removeChild(input)
   }
 }
+
 </script>
 <style>
 :root {

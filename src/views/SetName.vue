@@ -43,7 +43,7 @@ const setName = async () => {
   } else {
     if (voteStore.user) {
       voteStore.user.accountName = name.value as string
-      router.replace('/me')
+      router.replace('/login')
     }
   }
 }

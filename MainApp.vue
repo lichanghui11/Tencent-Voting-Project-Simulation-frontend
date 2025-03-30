@@ -1,6 +1,6 @@
 <template>
   <Suspense>
-    <template #fallback>Loadding...</template>
+    <template #fallback>Loading...</template>
     <App></App>
   </Suspense>
 </template>

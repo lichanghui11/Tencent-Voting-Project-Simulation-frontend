@@ -33,8 +33,8 @@
             @click="handleOptClick(option.optionId)"
           >
             <span>{{ option.content }}</span>
-            <span v-if="isLoading && option.optionId == isLastClicked" class="animate-spin"
-              ><el-icon><Loading></Loading></el-icon
+            <span v-if="isLoading && option.optionId == isLastClicked" class="animate-spin origin-center"
+              ><el-icon class="!flex !items-center"><Loading></Loading></el-icon
             ></span>
             <span v-else class="text-[25px]">{{ optionChecked[option.optionId] ? '🗳️' : '' }}</span>
 
@@ -272,7 +272,6 @@ const isLastClicked = ref(-1)
 const selectedOptionIds = ref<number[]>([])
 
 function handleOptClick(id: number) {
-  debugger
   if (!currentVoteInfo.vote.anonymous) {
     // 实名
     //选中即投票
@@ -287,11 +286,15 @@ function handleOptClick(id: number) {
         currentVoteInfo.userVotes = res.data.result.userVotes
         isLoading.value = false
         isLastClicked.value = -1
+      }).catch((e) => {
+        console.log(e.response.data.msg)
+        isLoading.value = false
+        alert(e.response.data.msg)
       })
+    
   } else {
     //匿名逻辑
     //先选中， 记录选中的项目， 点击按钮提交
-    debugger
     if (isButtonShow.value) {
       //button还在，说明还可以投票
 
@@ -334,7 +337,6 @@ const optionChecked = computed(() => {
 console.log('option checked: ', optionChecked.value)
 //投票提交按钮
 function submit() {
-  debugger
   axios
     .post('/api/vote/' + currentVoteInfo.vote.voteId, {
       optionIds: selectedOptionIds.value,
@@ -382,7 +384,6 @@ function handleAvatarVisible(i: number) {
 
 //控制显示更多的头像的展开符号
 const hasMore = (optionId: string) => {
-  debugger
   if (eachOptionVotes.value[optionId]) {
     console.log(eachOptionVotes.value)
     return true

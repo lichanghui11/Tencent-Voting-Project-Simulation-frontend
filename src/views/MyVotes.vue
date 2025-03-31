@@ -151,8 +151,8 @@ const actions = ref([
       showToast('复制成功')
     }
   },
-  { name: '选项二' },
-  { name: '选项三' }
+  { name: '不能点这里' },
+  { name: '也不能点这里' },
 ])
 // const onSelect = (actions: ActionSheetAction, id: number) => {
  
@@ -182,4 +182,5 @@ function deleteVote(vote: any, i: number) {
   --van-nav-bar-icon-color: #3a6bea;
   --el-fill-color-blank: #f2f4f7;
 }
+
 </style>

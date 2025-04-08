@@ -64,7 +64,7 @@
               :key="Math.random().toString()"
               class="w-[24px] h-[24px] rounded-full inline-block bg-white"
             >
-              <img :src="`http://192.168.3.11:3000/api${user.avatarUrl}`" class="rounded-full"
+              <img :src="`https://143.198.89.120:3000/api${user.avatarUrl}`" class="rounded-full"
             /></span>
             <span 
              v-if="hasMore(option.optionId)"

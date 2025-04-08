@@ -37,6 +37,7 @@ const currentUser = voteStore.user
 
 const avatar = ref('')
 const avatarPath = currentUser?.avatarUrl 
-avatar.value = avatarPath ? ('http://192.168.3.11:3000/api' + avatarPath) : 'https://dummyimage.com/50x50/3a6bea/bccecb'
+console.log('avatarPath: ', avatarPath)
+avatar.value = avatarPath ? (`https://${location.hostname}:3000/api` + avatarPath) : 'https://dummyimage.com/50x50/3a6bea/bccecb'
 </script>
 
